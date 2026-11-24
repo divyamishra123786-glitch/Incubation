@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IncubaSmart — Business Incubation Decision Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-mark">IS</span>
+      <div class="brand-text">
+        <h1>IncubaSmart</h1>
+        <p>Business Incubation · Predictive Decision Support</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="prototype-badge">40% working prototype</span>
+      <button id="themeToggle" class="btn-ghost btn-ghost-light" type="button">Dark mode</button>
+    </div>
+  </div>
+</header>
+
+<main class="layout">
+
+  <section class="hero card">
+    <div>
+      <span class="eyebrow">INCUBATOR INTELLIGENCE WORKSPACE</span>
+      <h2>Turn startup data into explainable decisions.</h2>
+      <p>Capture startup metrics, evaluate growth and risk, simulate scenarios, and translate the result into a resource-allocation plan.</p>
+    </div>
+    <div class="hero-flow">
+      <span>Data Ingestion</span><b>→</b><span>Prediction</span><b>→</b><span>Allocation</span><b>→</b><span>Strategy</span>
+    </div>
+  </section>
+
+  <section class="kpi-grid" aria-label="Portfolio overview">
+    <div class="kpi card"><span class="label">Startups analysed</span><strong id="kpiStartups">0</strong><small>local session portfolio</small></div>
+    <div class="kpi card"><span class="label">Average score</span><strong id="kpiAvg">—</strong><small>out of 10</small></div>
+    <div class="kpi card"><span class="label">High-potential</span><strong id="kpiHigh">0</strong><small>score ≥ 8</small></div>
+    <div class="kpi card"><span class="label">Resource focus</span><strong id="kpiFocus">—</strong><small>based on portfolio gaps</small></div>
+  </section>
+
+  <section class="card pulse-card" id="portfolioPulseCard">
+    <div class="section-heading">
+      <div><span class="eyebrow">PORTFOLIO CONTROL CENTER</span><h2>Incubator Action Queue</h2></div>
+      <button id="exportPortfolioBtn" class="btn-ghost" type="button">Export Portfolio</button>
+    </div>
+    <p class="card-sub">A quick operational view of the startups that may need follow-up, financial review or intervention.</p>
+    <div class="pulse-grid">
+      <div class="pulse-stat"><span class="label">Needs attention</span><strong id="pulseAttention">0</strong><small>risk / runway / growth flags</small></div>
+      <div class="pulse-stat"><span class="label">Short runway</span><strong id="pulseRunway">0</strong><small>under 3 months</small></div>
+      <div class="pulse-stat"><span class="label">High potential</span><strong id="pulsePotential">0</strong><small>score ≥ 8</small></div>
+      <div class="pulse-stat"><span class="label">Portfolio average</span><strong id="pulseAverage">—</strong><small>composite score / 10</small></div>
+    </div>
+    <div id="pulseList" class="pulse-list"><div class="empty-state compact">Analyze startups to generate an operational action queue.</div></div>
+  </section>
+
+  <section class="card how-card">
+    <details id="howDetails">
+      <summary>How the decision engine works <span class="chev">▾</span></summary>
+      <div class="how-body">
+        <p>The prototype uses a transparent weighted scoring engine. This is intentionally not presented as a trained ML model.</p>
+        <div class="how-grid">
+          <div><h3>Growth · 0–3</h3><p>≥20% → 3 · ≥10% → 2 · below → 1</p></div>
+          <div><h3>Revenue · 0–3</h3><p>≥₹1L → 3 · ≥₹50K → 2 · below → 1</p></div>
+          <div><h3>Funding · 0–2</h3><p>≥₹5L → 2 · ≥₹2L → 1 · below → 0</p></div>
+          <div><h3>Team · 0–2</h3><p>≥5 people → 2 · below → 1</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section class="card form-card" aria-labelledby="form-heading">
+    <div class="section-heading">
+      <div><span class="eyebrow">01 · DATA INGESTION</span><h2 id="form-heading">Startup Analysis</h2></div>
+      <button id="demoBtn" class="btn-ghost" type="button">Load demo data</button>
+    </div>
+    <p class="card-sub">Enter a startup profile and generate an explainable decision snapshot.</p>
+    <form id="startupForm" novalidate>
+      <div class="field"><label for="startupName">Startup name</label><input type="text" id="startupName" placeholder="e.g. EduTech Pro" required></div>
+      <div class="field"><label for="industry">Industry</label>
+        <select id="industry" required>
+          <option value="" disabled selected>Select industry</option>
+          <option>EdTech</option><option>FinTech</option><option>HealthTech</option><option>AgriTech</option>
+          <option>E-commerce</option><option>SaaS</option><option>Manufacturing</option><option>Other</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for="teamSize">Team size</label><input type="number" id="teamSize" min="1" placeholder="5" required></div>
+        <div class="field"><label for="growth">Monthly growth (%)</label><input type="number" id="growth" min="0" placeholder="25" required></div>
+      </div>
+      <div class="field"><label for="funding">Funding raised (₹)</label><input type="number" id="funding" min="0" placeholder="800000" required></div>
+      <div class="field"><label for="revenue">Monthly revenue (₹)</label><input type="number" id="revenue" min="0" placeholder="200000" required></div>
+      <div class="field"><label for="expenses">Monthly operating expenses (₹)</label><input type="number" id="expenses" min="0" placeholder="120000" required></div>
+      <button type="submit" class="btn-primary">Analyze Startup <span>↗</span></button>
+    </form>
+  </section>
+
+  <section class="card result-card" aria-labelledby="result-heading">
+    <div class="section-heading">
+      <div><span class="eyebrow">02 · PREDICTIVE DECISION</span><h2 id="result-heading">Analysis Result</h2></div>
+      <span class="status-dot">Explainable</span>
+    </div>
+    <div id="emptyState" class="empty-state">
+      <div class="empty-icon">◎</div>
+      <p>Run an analysis to generate growth potential, risk, resource priority and strategic actions.</p>
+    </div>
+
+    <div id="resultBody" class="result-body hidden">
+      <div class="result-top">
+        <div><span class="label">Startup</span><p id="resStartup" class="value-lg">—</p><span id="resIndustry" class="muted">—</span></div>
+        <div id="result-actions" class="result-actions"><button id="copyBtn" class="btn-ghost" type="button">Copy</button><button id="downloadBtn" class="btn-ghost" type="button">Report</button></div>
+      </div>
+
+      <div class="result-grid">
+        <div class="pill"><span class="label">Growth Potential</span><p id="resGrowth" class="value-tag">—</p></div>
+        <div class="pill"><span class="label">Risk Level</span><p id="resRisk" class="value-tag">—</p></div>
+        <div class="pill"><span class="label">Composite Score</span><p id="resScore" class="value-tag score-value">—</p></div>
+        <div class="pill"><span class="label">Resource Priority</span><p id="resPriority" class="value-tag">—</p></div>
+      </div>
+
+      <div class="breakdown"><span class="label">Score breakdown</span><div id="breakdownBars" class="bars"></div></div>
+
+      <div class="financial-strip">
+        <div class="pill"><span class="label">Financial Health</span><p id="resFinancial" class="value-tag">—</p></div>
+        <div class="pill"><span class="label">Estimated Runway</span><p id="resRunway" class="value-tag score-value">—</p></div>
+      </div>
+
+      <div class="decision-grid">
+        <div class="recommendations"><span class="label">Recommended Resources</span><ul id="resList" class="res-list"></ul></div>
+        <div class="next-action"><span class="label">Next strategic action</span><strong id="nextAction">—</strong><p id="actionReason">—</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card allocation-card">
+    <div class="section-heading"><div><span class="eyebrow">03 · STRATEGIC ALLOCATION</span><h2>Resource Allocation Plan</h2></div><span class="small-note">illustrative prototype allocation</span></div>
+    <p class="card-sub">A simple rule-based plan converts identified gaps into a suggested support mix.</p>
+    <div id="allocationEmpty" class="empty-state compact">Analyze a startup to generate its allocation plan.</div>
+    <div id="allocationBody" class="allocation-body hidden">
+      <div class="allocation-summary"><div><span class="label">Suggested support budget</span><strong id="allocBudget">—</strong></div><div><span class="label">Primary intervention</span><strong id="allocPrimary">—</strong></div><div><span class="label">Expected focus</span><strong id="allocFocus">—</strong></div></div>
+      <div id="allocationBars" class="allocation-bars"></div>
+    </div>
+  </section>
+
+  <section class="card simulator-card">
+    <div class="section-heading"><div><span class="eyebrow">04 · SCENARIO PLANNING</span><h2>What-if Simulator</h2></div><button id="resetSim" class="btn-ghost" type="button">Reset</button></div>
+    <p class="card-sub">Change one or more metrics and instantly see how the decision score responds.</p>
+    <div class="sim-grid">
+      <label>Growth <input id="simGrowth" type="range" min="0" max="50" value="20"><output id="simGrowthOut">20%</output></label>
+      <label>Revenue <input id="simRevenue" type="range" min="0" max="300000" step="10000" value="100000"><output id="simRevenueOut">₹1L</output></label>
+      <label>Funding <input id="simFunding" type="range" min="0" max="1000000" step="50000" value="500000"><output id="simFundingOut">₹5L</output></label>
+      <label>Team size <input id="simTeam" type="range" min="1" max="20" value="5"><output id="simTeamOut">5 people</output></label>
+    </div>
+    <div class="sim-result"><div><span class="label">Scenario score</span><strong id="simScore">8 / 10</strong></div><div><span class="label">Potential</span><strong id="simPotential">High</strong></div><div><span class="label">Risk</span><strong id="simRisk">Low</strong></div><div><span class="label">Gap to next level</span><strong id="simGap">0 points</strong></div></div>
+  </section>
+
+  <section class="card ingest-card">
+    <div class="section-heading"><div><span class="eyebrow">05 · BATCH DATA INGESTION</span><h2>CSV Portfolio Import</h2></div><span class="small-note">browser-only demo</span></div>
+    <p class="card-sub">Upload a CSV with startup metrics to batch-analyse multiple records without a backend.</p>
+    <div class="upload-row">
+      <label class="file-label">Choose CSV <input id="csvFile" type="file" accept=".csv,text/csv"></label>
+      <span id="csvStatus" class="muted">Expected columns: name, industry, teamSize, funding, revenue, expenses, growth</span>
+    </div>
+    <div id="batchResult" class="hidden batch-result">
+      <div class="batch-head"><strong id="batchCount">0 records</strong><button id="downloadCsvBtn" class="btn-ghost" type="button">Export analysed CSV</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Startup</th><th>Industry</th><th>Score</th><th>Potential</th><th>Risk</th><th>Priority</th></tr></thead><tbody id="batchTable"></tbody></table></div>
+    </div>
+  </section>
+
+  <section class="card history-card">
+    <div class="history-head"><div><span class="eyebrow">06 · PORTFOLIO MEMORY</span><h2>Session History</h2></div><button id="clearHistoryBtn" class="btn-ghost" type="button">Clear</button></div>
+    <p class="card-sub">Analyses remain in this browser so you can compare a small incubator portfolio during a demo.</p>
+    <ul id="historyList" class="history-list"><li class="history-empty">No startups analyzed yet.</li></ul>
+  </section>
+
+  <section class="card chart-card hidden" id="chartCard">
+    <div class="section-heading"><div><span class="eyebrow">07 · PORTFOLIO VIEW</span><h2>Score Comparison</h2></div><span class="small-note">latest 8 analyses</span></div>
+    <div id="chartBars" class="chart-bars"></div>
+  </section>
+
+</main>
+
+
+  <section class="card pipeline-card">
+    <div class="section-heading">
+      <div><span class="eyebrow">08 · INCUBATION PIPELINE</span><h2>Startup Journey Tracker</h2></div>
+      <span class="small-note">demo workflow</span>
+    </div>
+    <p class="card-sub">Move a startup through the incubation lifecycle and keep the next intervention visible.</p>
+    <div class="pipeline" id="pipeline">
+      <button class="stage active" data-stage="Idea"><span>01</span>Idea</button>
+      <i>→</i>
+      <button class="stage" data-stage="Validation"><span>02</span>Validation</button>
+      <i>→</i>
+      <button class="stage" data-stage="MVP"><span>03</span>MVP</button>
+      <i>→</i>
+      <button class="stage" data-stage="Traction"><span>04</span>Traction</button>
+      <i>→</i>
+      <button class="stage" data-stage="Scale"><span>05</span>Scale</button>
+    </div>
+    <div class="pipeline-note" id="pipelineNote">
+      <strong>Idea stage</strong>
+      <span>Validate the problem, customer segment and business model before allocating larger resources.</span>
+    </div>
+  </section>
+
+  <section class="card matrix-card">
+    <div class="section-heading">
+      <div><span class="eyebrow">09 · DECISION MATRIX</span><h2>Incubator Readiness Matrix</h2></div>
+      <span class="small-note">transparent scoring</span>
+    </div>
+    <p class="card-sub">A compact view of the four dimensions that drive the prototype's intervention plan.</p>
+    <div class="matrix-grid">
+      <label class="matrix-item">Market validation
+        <select id="matrixMarket"><option value="1">Low</option><option value="2" selected>Moderate</option><option value="3">Strong</option></select>
+      </label>
+      <label class="matrix-item">Product maturity
+        <select id="matrixProduct"><option value="1">Idea</option><option value="2" selected>MVP</option><option value="3">Market-ready</option></select>
+      </label>
+      <label class="matrix-item">Financial readiness
+        <select id="matrixFinance"><option value="1">Early</option><option value="2" selected>Stable</option><option value="3">Strong</option></select>
+      </label>
+      <label class="matrix-item">Team capability
+        <select id="matrixTeam"><option value="1">Needs support</option><option value="2" selected>Developing</option><option value="3">Strong</option></select>
+      </label>
+    </div>
+    <div class="matrix-output">
+      <div><span class="label">Readiness index</span><strong id="matrixScore">67%</strong></div>
+      <div><span class="label">Intervention</span><strong id="matrixAction">Mentorship</strong></div>
+      <div><span class="label">Decision note</span><p id="matrixNote">Strengthen the weakest readiness dimension before scaling resources.</p></div>
+    </div>
+  </section>
+
+  <section class="card operations-card">
+    <div class="section-heading">
+      <div><span class="eyebrow">10 · INCUBATION OPERATIONS</span><h2>Startup Tracking</h2></div>
+      <span id="dataQualityBadge" class="quality-badge">Data quality: —</span>
+    </div>
+    <p class="card-sub">Track the current startup stage, follow-up status and data completeness after analysis.</p>
+    <div class="ops-grid">
+      <div class="ops-panel">
+        <span class="label">Current startup</span>
+        <strong id="trackedStartup">No startup selected</strong>
+        <label class="inline-field">Status
+          <select id="startupStatus">
+            <option>Under Review</option><option>Accepted</option><option>Mentorship</option><option>MVP Development</option><option>Traction</option><option>Scaled</option>
+          </select>
+        </label>
+        <button id="saveStatusBtn" class="btn-primary small-btn" type="button">Save Status</button>
+      </div>
+      <div class="ops-panel">
+        <span class="label">Data completeness</span>
+        <div class="quality-meter"><span id="qualityFill"></span></div>
+        <strong id="qualityPercent">—</strong>
+        <p id="qualityNote" class="muted">Analyze a startup to check profile completeness.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card action-card">
+    <div class="section-heading">
+      <div><span class="eyebrow">11 · FOLLOW-UP MANAGEMENT</span><h2>Action Tracker</h2></div>
+      <button id="addActionBtn" class="btn-ghost" type="button">Add Action</button>
+    </div>
+    <p class="card-sub">Turn recommendations into trackable follow-up tasks for the incubation team.</p>
+    <div id="actionEmpty" class="empty-state compact">Analyze a startup to create follow-up actions.</div>
+    <div id="actionList" class="action-list hidden"></div>
+  </section>
+
+  <section class="card review-card">
+    <div class="section-heading">
+      <div><span class="eyebrow">13 · REVIEW WORKSPACE</span><h2>Mentor Decision Log</h2></div>
+      <span class="small-note">saved locally</span>
+    </div>
+    <p class="card-sub">Record the review outcome and a short mentor note after evaluating a startup.</p>
+    <div class="review-grid">
+      <div class="ops-panel">
+        <span class="label">Current startup</span>
+        <strong id="reviewStartup">No startup selected</strong>
+        <label class="inline-field">Review outcome
+          <select id="reviewOutcome">
+            <option>Continue Validation</option><option>Advance to Next Stage</option><option>Needs Intervention</option><option>Hold for Review</option>
+          </select>
+        </label>
+      </div>
+      <div class="ops-panel">
+        <label for="mentorNote" class="label">Mentor / reviewer note</label>
+        <textarea id="mentorNote" rows="4" placeholder="Example: Validate customer retention before increasing market-access support."></textarea>
+        <button id="saveReviewBtn" class="btn-primary small-btn" type="button">Save Review</button>
+        <p id="reviewSaved" class="muted"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card shortlist-card">
+    <div class="section-heading">
+      <div><span class="eyebrow">12 · INCUBATOR SHORTLIST</span><h2>Startup Shortlist</h2></div>
+      <span class="small-note">saved locally in this browser</span>
+    </div>
+    <p class="card-sub">Mark startups for further incubator review without losing their analysis context.</p>
+    <div id="shortlistEmpty" class="empty-state compact">No startups shortlisted yet.</div>
+    <div id="shortlistTableWrap" class="table-wrap hidden">
+      <table><thead><tr><th>Startup</th><th>Score</th><th>Potential</th><th>Risk</th><th>Status</th><th>Action</th></tr></thead><tbody id="shortlistTable"></tbody></table>
+    </div>
+  </section>
+
+<footer class="site-footer">
+  <p>IncubaSmart · college demonstration prototype · transparent rule-based decision engine, not a trained production ML model.</p>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
